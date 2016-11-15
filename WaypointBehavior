@@ -23,11 +23,11 @@ function OnTriggerExit(collider : Collider)
 function OnGUI()
 {
   if(customSkin)
-    GUI.Skin = customSkin; 
+    GUI.skin = customSkin; 
   
   if(isTriggered)
   {
-    var store = this.GetComponent(GUI.WaypointStore);
+    var store = this.GetComponent(GUI_WaypointStore);
     
     if( !store.GetStoreStatus() )
     {
