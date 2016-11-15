@@ -1,0 +1,42 @@
+var customSkin : GUISkin;
+private var isTriggered = false;
+
+function OnTriggerEnter(collider : Collider)
+{
+  var playerStatus : Widget_Status = collider.GetComponent(Widget_Status);
+  if(playerStatus == null) return;
+  
+  isTriggered = true;
+  
+  playerStatus.energy = playerStatus.maxEnergy;
+  playerStatus.health = playerStatus.maxHealth;
+}
+
+function OnTriggerExit(collider : Collider)
+{
+  var playerStatus : Widget_Status = collider.GetComponent(Widget_Status);
+  if(playerStatus == null) return;
+  
+  isTriggered = false;
+}
+
+function OnGUI()
+{
+  if(customSkin)
+    GUI.Skin = customSkin; 
+  
+  if(isTriggered)
+  {
+    var store = this.GetComponent(GUI.WaypointStore);
+    
+    if( !store.GetStoreStatus() )
+    {
+      if(GUI.Button(Rect(Screen.width/2 - 126, Screen.height - 100, 252, 113), "Open Store"))
+      {
+        store.StoreFrontToggle();
+      }
+    }
+  }
+  
+} 
+
