@@ -1,0 +1,33 @@
+var customSkin : GUISkin;
+var mainMenuBG : Texture2D;
+var mainTitle : Texture2D;
+
+private var isLoading : boolean;
+
+function OnGUI()
+{
+  if(customSkin)
+  {
+      GUI.skin = customSkin;
+  }
+  
+  GUI.Box(Rect(0, 0, Screen.width, Screen.height), " " );
+  GUI.Label(Rect(0, 0, Screen.width, Screen.height), mainMenuBG);
+  
+  GUI.Label(Rect(Screen.width - 500, 50, mainTitle.width, mainTitle.height), mainTitle);
+  
+  if(GUI.Button( Rect(Screen.width - 380, Screen.height - 280, 320, 80), "Start Game", "Long Button") )
+  {
+    isLoading = true;
+    Application.LoadLevel("Chapter_13");
+  }
+  if(GUI.Button( Rect(Screen.width - 380, Screen.height - 180, 320, 80), "Quit Game", "Long Button") )
+  {
+    Application.Quit();
+  }
+  
+  if(isLoading)
+  {
+    GUI.Label(Rect(Screen.width/2 - 50, Screen.height - 40, 100, 50), "Now Loading");
+  }
+}
