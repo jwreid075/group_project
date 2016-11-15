@@ -19,7 +19,7 @@ var circBackImage : Texture2D;
 private var customControls : GUI_CustomControls;
 private var playerInfo : Widget_Status;
 private var playerInvo : Widget_Inventory;
-private var playerAttack : Widget_AttackController;
+//private var playerAttack : Widget_AttackController;
 private var closestEnemyStatus;
 private var player;
 
@@ -31,7 +31,7 @@ function Awake()
   playerInfo = FindObjectOfType(Widget_Status);
   customControls = FindObjectOFType(GUI_CustomControls);
   playerInvo = FindObjectOfType(Widget_Inventory);
-  playerAttack = FindObjectOfType(Widget_AttackController);
+  //playerAttack = FindObjectOfType(Widget_AttackController);
   player = GameObject.FindWithTag("Player");
 }
 
@@ -56,13 +56,13 @@ function OnGUI()
   customControls.InvoHudButton(Rect(Screen.width - 210, Screen.height - 100, 93, 95), playerInvo.GetItemCount(InventoryItem.SCREW), screwImage, "Number of screws you've collected.");
   customControls.InvoHudButton(Rect(Screen.width - 110, Screen.height - 100, 93, 95), playerInvo.GetItemCount(InventoryItem.NUT), gearImage, ("Number of gear you've collected.");
   
-  closestEnemy = playerAttack.GetClosestEnemy();
+  //closestEnemy = playerAttack.GetClosestEnemy();
   if(closestEnemy != null)
   {
     enemyDistance = Vector3.Distance(closestEnemy.transform.position, player.transform.position);
     if(enemyDistance < 20.0)
     {
-      closestEnemyStatus = closestEnemy.GetComponent(EBunny_Status);
+     // closestEnemyStatus = closestEnemy.GetComponent(EBunny_Status);
       enemyImage = closestEnemyStatus.GetCharImage();
       customControls.RightStatusMeter(enemyImage, closestEnemyStatus.health, closestEnemyStatus.energy, rbarImage, rhbar, rebar, circBackImage);
     }
