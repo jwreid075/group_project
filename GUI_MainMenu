@@ -19,7 +19,7 @@ function OnGUI()
   if(GUI.Button( Rect(Screen.width - 380, Screen.height - 280, 320, 80), "Start Game", "Long Button") )
   {
     isLoading = true;
-    Application.LoadLevel("Chapter_13");
+    Application.LoadLevel("Main");
   }
   if(GUI.Button( Rect(Screen.width - 380, Screen.height - 180, 320, 80), "Quit Game", "Long Button") )
   {
