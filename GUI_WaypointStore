@@ -8,7 +8,7 @@ private var openStore = false;
 
 function Awake()
 {
-  playerInventory = FindObjectWithType(Widget_Inventory);
+  playerInventory = FindObjectOfType(Widget_Inventory);
   if(!playerInventory)
   {
     Debug.Log("No link to player's inventory.");
