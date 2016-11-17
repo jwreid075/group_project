@@ -1,0 +1,33 @@
+var currentWP: int = 0;
+var counter : int = 0;
+
+var waypoints : GameObject[];
+
+var speed : int = 5;
+var rotationSpeed: int = 2;
+
+var accuracy: Number = 1;
+
+function Update () 
+{
+	if(waypoints.length == 0)
+		return;
+
+	if(Vector3.Distance(waypoints[currentWP].transform.position, transform.position) < accuracy)
+	{
+		counter++;
+		currentWP++;
+		if(currentWP >= waypoints.length)
+		{
+			currentWP = 0;
+		}
+	}
+
+	var direction = waypoints[currentWP].transform.position - transform.position;
+	if(currentWP == 0 && counter == 5)
+	{
+		Application.Quit();
+	}
+	transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), rotationSpeed * Time.deltaTime);
+	transform.Translate(0, 0, Time.deltaTime * speed);
+}
