@@ -17,6 +17,8 @@ playerController = GetComponent(Widget_Controller) ;
 var controller : CharacterController;
 controller = GetComponent(CharacterController);
 
+private var isDead: boolean = false;
+
 //Helper Controller Functions-----------------------------------------
 function ApplyDamage(damage: float){
     
@@ -66,15 +68,28 @@ function Die(){
     
 HideCharacter();
     yield WaitForSeconds(1);
-    
-    //restart player at last respawn check point and give max life
-    if(CheckPoint.isActivePt){
-        controller.transform.position = CheckPoint.isActivePt.transform.position;
-        controller.transform.position.y += 0.5; 
-                //so not to get stuck in the platform itself
-    }
-    ShowCharacter();
-    health = maxHealth;
+    isDead = true;
+
+    //We Doing it.
+
+
+
+   	
+}
+
+function OnGUI()
+{
+	if(isDead == true)
+	{
+		if(GUI.Button(Rect(Screen.width/2 - 126, Screen.height-100, 250, 50), "Respawn"))
+	    {
+	        Respawn();
+	   	}
+	    if(GUI.Button(Rect(Screen.width/2 - 126, Screen.height - 50, 250, 50), "Quit"))
+	    {
+	    	Application.Quit();
+	    }
+	}
 }
 
 function HideCharacter(){
@@ -89,4 +104,17 @@ function ShowCharacter(){
     GameObject.Find("Wheels").GetComponent(SkinnedMeshRenderer).enabled = true;
     playerController.isControllable = true;
 }
+
+function Respawn(){
+	//restart player at last respawn check point and give max life
+	if(CheckPoint.isActivePt){
+        controller.transform.position = CheckPoint.isActivePt.transform.position;
+        controller.transform.position.y += 0.5; 
+                //so not to get stuck in the platform itself
+    }
+    ShowCharacter();
+    health = maxHealth;
+    isDead = false;
+}
+
 @script AddComponentMenu("Player/Widget'sStateManager")
