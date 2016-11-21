@@ -1,4 +1,7 @@
+import UnityEngine.UI;
+
 var customSkin : GUISkin;
+var enemyStatus : Text;
 private var isTriggered = false;
 
 function OnTriggerEnter(collider : Collider)
@@ -31,11 +34,16 @@ function OnGUI()
     
     if( !store.GetStoreStatus() )
     {
+      enemyStatus.gameObject.SetActive(true);
       if(GUI.Button(Rect(Screen.width/2 - 126, Screen.height - 100, 252, 113), "Open Store"))
       {
         store.StoreFrontToggle();
       }
     }
+  }
+  else
+  {
+    enemyStatus.gameObject.SetActive(false);
   }
   
 } 
