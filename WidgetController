@@ -1,0 +1,145 @@
+//Widget_Controller: Handles Widget's movement and player input
+
+//Widget's Movement Variables------------------------------------------------------------------
+//These can be changed in the Inspector
+var rollSpeed = 6.0;
+var fastRollSpeed = 2.0;
+var jumpSpeed = 8.0;
+var gravity = 20.0;
+var rotateSpeed = 4.0;
+var duckSpeed = .5;
+//var boostText : GameObject;
+//var healthText : GameObject;
+//var scoreText : GameObject;
+//var endText : GameObject;
+//var E1patrolSc : patrol;
+//var E2patrolSc : patrol;
+//var E3patrolSc : patrol;
+
+//private, helper variables-----------------------------------------------------------------------
+private var moveDirection = Vector3.zero;
+private var grounded : boolean = false;
+private var moveHorz = 0.0;
+private var normalHeight = 2.0;
+private var duckHeight = 1.0;
+private var rotateDirection = Vector3.zero;
+private var score = 0;
+
+var isControllable :boolean = true;
+
+//cache controller so we only have to find it once----------------------------------------------
+var controller : CharacterController ;
+controller = GetComponent(CharacterController);
+var widgetStatus : Widget_Status;
+widgetStatus = GetComponent(Widget_Status);
+
+function Start()
+{
+//boostText = GameObject.Find("boostText");
+//healthText = GameObject.Find("healthText");
+//scoreText = GameObject.Find("scoreText");
+//endText = GameObject.Find("endText");
+}
+
+function addScore()
+{
+	score += 1;
+}
+
+//Move the controller during the fixed frame updates------------
+function FixedUpdate() {
+
+	//check to make sure the character is controllable and not dead
+	if(!isControllable)
+		Input.ResetInputAxes();
+	
+	else{
+		if (grounded) {
+			// Since we're touching something solid, like the ground, allow movement
+			//Calculate movement directly from Input Axes
+			moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+			moveDirection = transform.TransformDirection(moveDirection);
+			moveDirection *= rollSpeed;
+			controller.height = normalHeight; //reset for after ducks
+			controller.center.y = controller.height/2;  //recenter for after ducks
+			
+			//Find rotation based upon axes if need to turn
+			moveHorz = Input.GetAxis("Horizontal");
+			if (moveHorz > 0)                                           //right turn
+				rotateDirection = new Vector3(0, 1, 0);
+			else if (moveHorz < 0)                                   //left turn
+				rotateDirection = new Vector3(0, -1, 0);
+			else                                                             //not turning
+				rotateDirection = new Vector3 (0, 0, 0);
+							
+			//Jump Controls
+			if (Input.GetButton ("Jump")) 
+			{
+				moveDirection.y = jumpSpeed + widgetStatus.jump;
+
+			}
+			
+			//Apply any Boosted Speed
+			if(Input.GetButton("Boost")){
+				if(widgetStatus){
+					if(widgetStatus.energy > 0)
+					{
+						moveDirection *= fastRollSpeed;
+						widgetStatus.energy -= widgetStatus.widgetBoostUsage *Time.deltaTime;
+					}
+				}
+			}
+			
+			//Duck the controller
+			if(Input.GetButton("Duck")){
+				controller.height = duckHeight;
+				controller.center.y = controller.height/2 + .25;
+				moveDirection *= duckSpeed;
+			}
+		}
+	
+		// Apply gravity to end Jump, enable falling, and make sure he's touching the ground
+		moveDirection.y -= gravity * Time.deltaTime; 
+		
+		// Move and rotate the controller
+		var flags = controller.Move(moveDirection * Time.deltaTime);  
+		controller.transform.Rotate(rotateDirection * Time.deltaTime, rotateSpeed);
+		grounded = ((flags & CollisionFlags.CollidedBelow) != 0 );
+		}
+
+	} 
+
+
+function OnTriggerEnter(coll : Collider)
+	{
+		if(coll.gameObject.tag == "Boost")
+		{
+			Destroy(coll.gameObject);
+			widgetStatus.energy += 10;
+
+		}
+		if(coll.gameObject.tag == "Health")
+		{
+			Destroy(coll.gameObject);
+			widgetStatus.health += 4;
+		}
+		if(coll.gameObject.tag == "Enemy")
+		{
+			widgetStatus.health -= 0.02;
+		}
+		if(coll.gameObject.tag == "Point")
+		{
+		Destroy(coll.gameObject);
+			addScore();
+		}
+		if(coll.gameObject.tag == "landmine")
+		{
+			Destroy(coll.gameObject);
+			widgetStatus.health -= 4;
+		}
+		if(coll.gameObject.tag == "jumpkit")
+		{
+			Destroy(coll.gameObject);
+			widgetStatus.jump += 20;
+		}
+	}
