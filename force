@@ -1,0 +1,7 @@
+var power : float = 500.0;
+function Start () {
+
+	var rp = GetComponent.<Rigidbody>();
+
+	rp.AddForce(Vector3(0, 0, power));
+}
