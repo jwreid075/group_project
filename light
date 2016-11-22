@@ -1,0 +1,17 @@
+var box : Transform;
+function Update () {
+
+	//Creates a vector 3 variable to take the position of the light
+	var dist : float = Vector3.Distance(box.position, transform.position);
+
+	Debug.Log(dist);
+	//If hte distance from the light is within 10 units it will enable the light, if it is farther than it is disabled.
+	if(dist <= 10)
+	{
+		GetComponent(Light).enabled = true;
+	}
+	else
+	{
+		GetComponent(Light).enabled = false;
+	}
+}
